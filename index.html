@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <title>Legal Notice Uglifier</title>
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    </head>
+
+    <body>
+        <div class="container">
+            <h1>Legal Notice Uglifier</h1>
+            <div style="margin:20px;">
+                <form id="legalnotice">
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" id="breaklines"> Break Lines
+                        </label>
+                    </div>
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" id="paranoid"> Paranoid mode (result would be not selectable)
+                        </label>
+                    </div>
+
+		            <div id="out"></div>
+                </form>
+            </div>
+
+            <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
+            <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+            <script type="text/javascript" src="js/legal-notice-uglifier.js"></script>
+            <script type="text/javascript">
+                var testLegalNotice = function(res) {
+                	var modal = $('<div class="modal fade"></div>');
+                	var dialog = $('<div class="modal-dialog" style="max-width:360px"></div>');
+                	var content = $('<div class="modal-content"></div>');
+                	var body = $('<div class="modal-body legal notice"></div>');
+                	var footer = $('<div class="modal-footer"><button type="button" class="btn btn-default" data-dismiss="modal">Close</button></div>');
+                	body.html(res.full);
+                	content.append(body);
+                	content.append(footer);
+                	dialog.append(content);
+                	modal.append(dialog);
+                	modal.appendTo("body");
+                	window.setTimeout(function() {
+                		modal.modal('show');
+                	});
+                };
+
+                var lines = [];
+                var calculating = false;
+                var lineCount = 1;
+                var newLine = function() {
+                	var extended = false;
+                	var container = $('<div class="form-group"></div>');
+                	var input = $('<input type="text" class="form-control" id="exampleInputEmail1" placeholder="Line ' + lineCount + '">')
+                	lines.push(input);
+                	input.on('focus', function() {
+                		if (!extended) {
+                			extended = true;
+                			newLine();
+                		}
+                	});
+                	var update = function() {
+                		if (!calculating) {
+                			calculating = true;
+                			window.setTimeout(function() {
+                				calculating = false;
+                				var informations = [];
+                				for (var k in lines) {
+                					informations.push(lines[k][0].value);
+                				}
+                				if (informations.length == 1) {
+                					return;
+                				}
+                				informations = informations.slice(0, informations.length - 1)
+                				var res = generateLegalNotice(informations, $('#paranoid')[0].checked, $('#breaklines')[0].checked);
+                				var test = $('<button class="btn btn-primary">Test it!</button>');
+                				test.on('click', function() {
+                					testLegalNotice(res);
+                				});
+                				var pre = $("<pre></pre>");
+                				pre.text(res.full);
+                				$("#out").empty();
+                				$("#out").append(pre);
+                				$("#out").append(test);
+                			}, 500);
+                		}
+                	};
+                	input.keyup(update);
+                	$('#paranoid').click(update);
+                	$('#breaklines').click(update);
+                	container.append(input);
+					$('#out').before(container);
+                	lineCount++;
+                }
+
+                document.addEventListener("DOMContentLoaded", newLine);
+            </script>
+        </div>
+    </body>
+
+</html>
