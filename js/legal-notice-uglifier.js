@@ -135,6 +135,9 @@
 		for (var i = 0; i < code.length; i++) {
 			res += code[i];
 			counter++;
+			if (code[i] == '\\') {
+				continue;
+			}
 			if (mode == 0) {
 				if (code[i] == '\'') {
 					mode = 1;
