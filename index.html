@@ -31,21 +31,26 @@
             <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
             <script type="text/javascript" src="js/legal-notice-uglifier.js"></script>
             <script type="text/javascript">
+                var testModal;
                 var testLegalNotice = function(res) {
-                	var modal = $('<div class="modal fade"></div>');
-                	var dialog = $('<div class="modal-dialog" style="max-width:360px"></div>');
-                	var content = $('<div class="modal-content"></div>');
-                	var body = $('<div class="modal-body legal notice"></div>');
-                	var footer = $('<div class="modal-footer"><button type="button" class="btn btn-default" data-dismiss="modal">Close</button></div>');
-                	body.html(res.full);
-                	content.append(body);
-                	content.append(footer);
-                	dialog.append(content);
-                	modal.append(dialog);
-                	modal.appendTo("body");
-                	window.setTimeout(function() {
-                		modal.modal('show');
-                	});
+                    if(!testModal) {
+                        var modal = $('<div class="modal fade"></div>');
+                        var dialog = $('<div class="modal-dialog" style="max-width:360px"></div>');
+                        var content = $('<div class="modal-content"></div>');
+                        var body = $('<div class="modal-body legal notice"></div>');
+                        var footer = $('<div class="modal-footer"><button type="button" class="btn btn-default" data-dismiss="modal">Close</button></div>');
+
+                        content.append(body);
+                        content.append(footer);
+                        dialog.append(content);
+                        modal.append(dialog);
+                        modal.appendTo("body");
+                        testModal = modal;
+                    }
+                    testModal.find(".modal-body").html(res.full);
+                    window.setTimeout(function() {
+                        testModal.modal('show');
+                    });
                 };
 
                 var lines = [];
@@ -94,7 +99,7 @@
                 	container.append(input);
 					$('#out').before(container);
                 	lineCount++;
-                }
+                };
 
                 document.addEventListener("DOMContentLoaded", newLine);
             </script>

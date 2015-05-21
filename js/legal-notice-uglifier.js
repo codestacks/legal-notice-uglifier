@@ -1,5 +1,4 @@
 (function(w) {
-	var stuff = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
 	var tags = ['b', 'i', 'u', 'span'];
 	var tagFix = {
 		'b': 'font-weight:inherit;',
@@ -15,7 +14,7 @@
 		var content = "";
 		var ic = Math.random() * (max - min) + min;
 		for (var i = 0; i < ic; i++) {
-			content += stuff[Math.floor(Math.random() * stuff.length)];
+			content += String.fromCharCode(97 + Math.floor(Math.random() * 26));
 		}
 		return content;
 	};
